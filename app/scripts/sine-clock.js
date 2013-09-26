@@ -65,17 +65,18 @@ Raphael.fn.drawSine = function (time) {
 var paper = Raphael(0, 100, 500, 250);
 
 
+
 setInterval(function(){
 
-	paper.clear();
 	var d = new Date();
-	var seconds = d.getSeconds();
-	var secondsRadians = -seconds * (Math.PI / 30);
-	console.log(seconds);
-	paper.drawSine(secondsRadians);
+	paper.clear();
+	var milliSeconds = d.getSeconds() + (d.getMilliseconds() / 1000);
+	var milliSecondsRadians = -milliSeconds * (Math.PI / 30) + (Math.PI / 2);
+	paper.drawSine(milliSecondsRadians);
 	paper.drawGraph();
 
-}, 1000);
+}, 100);
+
 
 
 
