@@ -1,4 +1,5 @@
 
+// draw veritcal line in the middle
 Raphael.fn.drawGraph = function() {
 	var set = this.set();
 
@@ -16,7 +17,7 @@ Raphael.fn.drawGraph = function() {
 	return set;
 }
 
-// isn't a true sine wave
+// isn't a true sine wave, not using, but probably way more effecient to draw
 Raphael.fn.drawBezierSine = function () {
 
 	var set = this.set();
@@ -33,9 +34,12 @@ Raphael.fn.drawBezierSine = function () {
 
 	return set;
 }
-Raphael.fn.drawSine = function (time) {
 
-	if (time == undefined) { time = 0; }
+// real sine wave, but the path code is long
+// takes lots of CPU to calculate this at an interval
+Raphael.fn.drawSine = function (startRadians) {
+
+	if (startRadians == undefined) { startRadians = 0; }
 	var set = this.set();
 
 	var stroke = 5;
@@ -45,15 +49,18 @@ Raphael.fn.drawSine = function (time) {
 
 	var p = [];
 
-	for(var i = (0); i <= (w); i++){
+	// for each x in the width of the svg, calculate y of sin wave
+	// skip every 10 pixels, less calculating
+	for(var x = (0); x <= (w); x = x+10){
 
-		var radians = (i+((w)/2)) * (Math.PI/((w)/2));
+		var radians = (x + (w/2)) * (Math.PI/(w/2));
 
-		var y = Math.sin(radians - time);
+		var y = Math.sin(radians - startRadians);
 		y = y*((h/2)-Math.ceil(stroke/2)) + (h/2);
 
-		command = (i == 0) ? "M" : "L";
-		p.push([command, i+ hpadding, y]);
+		command = (x == 0) ? "M" : "L";
+		p.push([command, x + hpadding, y]);
+
 	}
 
 	set.push(this.path(p).attr({"stroke": "blue", "stroke-width": stroke, "stroke-linecap": "round"}));
@@ -61,22 +68,35 @@ Raphael.fn.drawSine = function (time) {
 	return set;
 }
 
+// create svg
+var paper = Raphael(0, 0, 500, 250);
+$('svg').css({'position': 'static'}); // hack to make the svn staticly posisioned
 
-var paper = Raphael(0, 100, 500, 250);
-
-
+// number to be displayed on the front end
+var displaySeconds = 0; 
 
 setInterval(function(){
-
+	
+	// Calulate the seconds past the minute with millisecond precision
+	// convert this number into radians
+	// (milliSecondsRadians is the start point, not the point under graph line)
 	var d = new Date();
-	paper.clear();
-	var milliSeconds = d.getSeconds() + (d.getMilliseconds() / 1000);
+	var seconds = d.getSeconds();
+	var milliSeconds = seconds + (d.getMilliseconds() / 1000);
 	var milliSecondsRadians = -milliSeconds * (Math.PI / 30) + (Math.PI / 2);
+	
+	// redraw the sine wave starting at the milliSecondsRadians
+	paper.clear();
 	paper.drawSine(milliSecondsRadians);
 	paper.drawGraph();
 
-}, 100);
+	// update the frontend seconds if needed
+	if (displaySeconds != seconds){
+		displaySeconds = seconds;
+		$('#seconds').html(displaySeconds)
+	}
 
+}, 100);
 
 
 

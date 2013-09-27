@@ -2,3 +2,8 @@
 body {
     background: #fafafa;
 }
+
+#seconds {
+	width: 500px;
+	text-align: center;
+}
