@@ -176,7 +176,8 @@ module.exports = function (grunt) {
                         '.htaccess',
                         'elements/**',
                         'lib-elements/**',
-                        'images/{,*/}*.{webp,gif}'
+                        'images/{,*/}*.{webp,gif}',
+                        'scripts/**'
                     ]
                 }]
             }
@@ -196,7 +197,6 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            
             'connect:livereload',
             'copy',
             'open',
@@ -206,29 +206,26 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'clean:server',
-        
-        
         'connect:test',
         'mocha'
     ]);
 
     grunt.registerTask('build', [
-        'clean:dist',
-        
+        'clean:dist',  
         'useminPrepare',
         'imagemin',
         'htmlmin',
         'concat',
         'cssmin',
-        'uglify',
+        // 'uglify',
         'copy',
-        'rev',
+        // 'rev',
         'usemin'
     ]);
 
     grunt.registerTask('default', [
-        'jshint',
-        'test',
+        // 'jshint',
+        // 'test',
         'build'
     ]);
 };
