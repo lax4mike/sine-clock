@@ -115,7 +115,7 @@ $(function(){
 		
 		// Calulate the seconds past the minute with millisecond precision
 		d = new Date();
-		
+
 		seconds = d.getSeconds();
 		milliSeconds = seconds + (d.getMilliseconds() / 1000);
 		
@@ -123,11 +123,11 @@ $(function(){
 		minutesSeconds = minutes + (seconds / 60);
 		
 		hours = d.getHours() % 12;
-		hoursSeconds = hours + minutesSeconds;
+		hoursSeconds = hours + minutesSeconds/60;
 
 		$(secondsSine).css({left: -(milliSeconds/60) * face.width});
 		$(minutesSine).css({left: -(minutesSeconds/60) * face.width});
-		$(hoursSine).css({left: -(hoursSeconds/60) * face.width});
+		$(hoursSine).css({left: -(hoursSeconds/12) * face.width});
 		
 		// update the frontend seconds if needed
 		if (displaySeconds != seconds){
