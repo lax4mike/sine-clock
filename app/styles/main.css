@@ -1,9 +1,22 @@
-
+/* line 2, main.scss */
 body {
-    background: #fafafa;
+  background: #fafafa;
 }
 
-#seconds {
-	width: 600px;
-	text-align: center;
+/* line 6, main.scss */
+#time {
+  width: 600px;
+  text-align: right;
+}
+/* line 9, main.scss */
+#time .hours {
+  color: #67ADEA;
+}
+/* line 12, main.scss */
+#time .minutes {
+  color: #0F6EC2;
+}
+/* line 15, main.scss */
+#time .seconds {
+  color: #04294A;
 }

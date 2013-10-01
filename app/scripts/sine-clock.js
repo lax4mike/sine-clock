@@ -10,11 +10,25 @@ $(function(){
 		var p = [
 		    ["M", 0, h/2],
 		    ["L", w, h/2],
-		    ["M", w/2, 0],
-		    ["L", w/2, h]
+		    ["M", w, 0],
+		    ["L", w, h]
 		 ];
 
-		set.push(this.path(p));
+		set.push(this.path(p).attr({"stroke": "#000", "stroke-width": 2, "stroke-linecap": "butt"}));
+
+
+		var q = [];
+		for (var rad = -Math.PI/2; rad <= Math.PI; rad += Math.PI/6) {
+			
+			var y = Math.sin(rad);
+			y = y*(h/2) + (h/2);
+
+			q.push(["M", 0, y]);
+			q.push(["L", w, y]);
+		}
+
+		set.push(this.path(q).attr({"stroke": "#999", "stroke-width": 1, "stroke-linecap": "butt"}));
+
 		return set;
 	}
 
@@ -89,23 +103,24 @@ $(function(){
 	// seconds 
 	var secondsSineRaphael = Raphael("clock-face", face.width*2, face.height);
 	var secondsSine = $(secondsSineRaphael.canvas);
-	$(secondsSine).css({'position': 'absolute', 'left': 0});
-	secondsSineRaphael.drawSine(Math.PI/2, 2);
+	$(secondsSine).css({'position': 'absolute', 'left': 0, 'top': 0});
+	secondsSineRaphael.drawSine(-Math.PI/2, 2, "#04294A");
 
 	// minutes
 	var minutesSineRaphael = Raphael("clock-face", face.width*2, face.height);
 	var minutesSine = $(minutesSineRaphael.canvas);
-	$(minutesSine).css({'position': 'absolute', 'left': 0});
-	minutesSineRaphael.drawSine(Math.PI/2, 2, "orange");
+	$(minutesSine).css({'position': 'absolute', 'left': 0, 'top': 0});
+	minutesSineRaphael.drawSine(-Math.PI/2, 2, "#0F6EC2");
 
 	// hours
 	var hoursSineRaphael = Raphael("clock-face", face.width*2, face.height);
 	var hoursSine = $(hoursSineRaphael.canvas);
-	$(hoursSine).css({'position': 'absolute', 'left': 0});
-	hoursSineRaphael.drawSine(Math.PI/2, 2, "red");
+	$(hoursSine).css({'position': 'absolute', 'left': 0, 'top': 0});
+	hoursSineRaphael.drawSine(-Math.PI/2, 2, "#67ADEA");
 
 	var graphRaphael = Raphael("clock-face", face.width, face.height);
 	graphRaphael.drawGraph();
+	$(graphRaphael.canvas).css({'position': 'absolute', 'left': 0, 'top': 0});
 
 	// number to be displayed on the front end
 	var displaySeconds = 0; 
@@ -132,7 +147,11 @@ $(function(){
 		// update the frontend seconds if needed
 		if (displaySeconds != seconds){
 			displaySeconds = seconds;
-			$('#seconds').html(hours + ":" + ("00" + minutes).slice(-2) + ":" + ("00" + displaySeconds).slice(-2))
+			$('#time').html(
+				"<span class='hours'>" + hours + "</span>" +
+				":<span class='minutes'>" + ("00" + minutes).slice(-2) + "</span>" +
+				":<span class='seconds'>" + ("00" + displaySeconds).slice(-2) + "</span>"
+			);
 		}
 
 	}, 100);

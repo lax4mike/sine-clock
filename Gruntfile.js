@@ -29,7 +29,12 @@ module.exports = function (grunt) {
                 nospawn: true,
                 livereload: true
             },
-        
+            compass: {
+                files: [
+                  'app/styles/**/*.{scss,sass}'
+                ],
+                tasks: 'compass:dist'
+            },
             livereload: {
                 options: {
                     livereload: LIVERELOAD_PORT
@@ -186,7 +191,18 @@ module.exports = function (grunt) {
             all: {
                 rjsConfig: '<%= yeoman.app %>/scripts/main.js'
             }
-        }
+        },
+        compass: {
+            dist: {
+                // http://compass-style.org/help/tutorials/configuration-reference/#configuration-properties
+                options: {
+                    'css-dir': 'app/styles',
+                    'sass-dir': 'app/styles',
+                    'force': true
+                }
+            }
+        },
+
     });
 
 
@@ -214,6 +230,7 @@ module.exports = function (grunt) {
         'clean:dist',  
         'useminPrepare',
         'imagemin',
+        'sass',
         'htmlmin',
         'concat',
         'cssmin',
