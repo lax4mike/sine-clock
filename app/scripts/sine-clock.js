@@ -71,7 +71,7 @@ $(function(){
 	}
 
 
-	var face = {width: 500, height: 250};
+	var face = {width: 600, height: 250};
 
 	// create svgs and clock-face
 	$("<div></div>", { 
@@ -112,7 +112,7 @@ $(function(){
 			$('#seconds').html(displaySeconds)
 		}
 
-	}, 10);
+	}, 100);
 
 
 
