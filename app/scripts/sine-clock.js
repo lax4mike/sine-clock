@@ -38,10 +38,11 @@ $(function(){
 
 	// real sine wave, but the path code is long
 	// takes lots of CPU to calculate this at an interval
-	Raphael.fn.drawSine = function (startRadians, frequency) {
+	Raphael.fn.drawSine = function (startRadians, frequency, color) {
 
 		if (startRadians == undefined) { startRadians = 0; }
 		if (frequency == undefined) { frequency = 1; }
+		if (color == undefined) { color = "blue"; }
 
 		var set = this.set();
 
@@ -65,7 +66,7 @@ $(function(){
 
 		}
 
-		set.push(this.path(p).attr({"stroke": "blue", "stroke-width": stroke, "stroke-linecap": "butt"}));
+		set.push(this.path(p).attr({"stroke": color, "stroke-width": stroke, "stroke-linecap": "butt"}));
 
 		return set;
 	}
@@ -85,31 +86,53 @@ $(function(){
 		
 	}).appendTo('.container');
 
-	var sineRaphael = Raphael("clock-face", face.width*2, face.height);
-	var sine = $(sineRaphael.canvas);
-	$(sine).css({'position': 'absolute', 'left': 0});
-	sineRaphael.drawSine(Math.PI/2, 2);
+	// seconds 
+	var secondsSineRaphael = Raphael("clock-face", face.width*2, face.height);
+	var secondsSine = $(secondsSineRaphael.canvas);
+	$(secondsSine).css({'position': 'absolute', 'left': 0});
+	secondsSineRaphael.drawSine(Math.PI/2, 2);
+
+	// minutes
+	var minutesSineRaphael = Raphael("clock-face", face.width*2, face.height);
+	var minutesSine = $(minutesSineRaphael.canvas);
+	$(minutesSine).css({'position': 'absolute', 'left': 0});
+	minutesSineRaphael.drawSine(Math.PI/2, 2, "orange");
+
+	// hours
+	var hoursSineRaphael = Raphael("clock-face", face.width*2, face.height);
+	var hoursSine = $(hoursSineRaphael.canvas);
+	$(hoursSine).css({'position': 'absolute', 'left': 0});
+	hoursSineRaphael.drawSine(Math.PI/2, 2, "red");
 
 	var graphRaphael = Raphael("clock-face", face.width, face.height);
 	graphRaphael.drawGraph();
 
 	// number to be displayed on the front end
 	var displaySeconds = 0; 
+	var d, seconds, milliSeconds, minutes, minutesSeconds, hours, hoursSeconds;
 
 	setInterval(function(){
 		
 		// Calulate the seconds past the minute with millisecond precision
-		var d = new Date();
-		var seconds = d.getSeconds();
-		var milliSeconds = seconds + (d.getMilliseconds() / 1000);
-		// var milliSecondsRadians = -milliSeconds * (Math.PI / 30) + (Math.PI / 2);
+		d = new Date();
+		
+		seconds = d.getSeconds();
+		milliSeconds = seconds + (d.getMilliseconds() / 1000);
+		
+		minutes = d.getMinutes() 
+		minutesSeconds = minutes + (seconds / 60);
+		
+		hours = d.getHours() % 12;
+		hoursSeconds = hours + minutesSeconds;
 
-		$(sine).css({left: -(milliSeconds/60) * face.width});
+		$(secondsSine).css({left: -(milliSeconds/60) * face.width});
+		$(minutesSine).css({left: -(minutesSeconds/60) * face.width});
+		$(hoursSine).css({left: -(hoursSeconds/60) * face.width});
 		
 		// update the frontend seconds if needed
 		if (displaySeconds != seconds){
 			displaySeconds = seconds;
-			$('#seconds').html(displaySeconds)
+			$('#seconds').html(hours + ":" + ("00" + minutes).slice(-2) + ":" + ("00" + displaySeconds).slice(-2))
 		}
 
 	}, 100);
@@ -118,5 +141,11 @@ $(function(){
 
 });
 
+String.prototype.lpad = function(padString, length) {
+    var str = this;
+    while (str.length < length)
+        str = padString + str;
+    return str;
+}
 
 
