@@ -230,7 +230,7 @@ module.exports = function (grunt) {
         'clean:dist',  
         'useminPrepare',
         'imagemin',
-        'sass',
+        'compass',
         'htmlmin',
         'concat',
         'cssmin',
