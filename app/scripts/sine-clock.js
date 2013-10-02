@@ -7,27 +7,39 @@ $(function(){
 		var h = this.height;
 		var w = this.width;
 
+		// vertical line on the right side
 		var p = [
-		    ["M", 0, h/2],
-		    ["L", w, h/2],
+		    // ["M", 0, h],
+		    // ["L", w, h],
 		    ["M", w, 0],
 		    ["L", w, h]
-		 ];
+		];
 
 		set.push(this.path(p).attr({"stroke": "#000", "stroke-width": 2, "stroke-linecap": "butt"}));
-
-
-		var q = [];
-		for (var rad = -Math.PI/2; rad <= Math.PI; rad += Math.PI/6) {
+		
+		var stroke = "#999";
+		var pi = Math.PI;
+		var i = 0;
+		for (var rad = pi/2; rad >= -(pi/2); rad -= pi/30) {
 			
 			var y = Math.sin(rad);
 			y = y*(h/2) + (h/2);
 
-			q.push(["M", 0, y]);
-			q.push(["L", w, y]);
-		}
+			var p = [];
 
-		set.push(this.path(q).attr({"stroke": "#999", "stroke-width": 1, "stroke-linecap": "butt"}));
+			p.push(["M", 0, y]);
+			p.push(["L", w, y]);
+
+			// using i because of errors with floating point decimal precision 
+
+			stroke = (i % 5 == 0) ? "#999" : "#eee";
+
+			set.push(this.path(p).attr({"stroke": stroke, "stroke-width": 1, "stroke-linecap": "butt"}));
+			// console.log(i, rad / Math.PI, y, stroke);
+			
+			i++;
+
+		}
 
 		return set;
 	}
